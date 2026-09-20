@@ -1,0 +1,3 @@
+-keepattributes *Annotation*
+-dontwarn org.jsoup.**
+-dontwarn okhttp3.**
