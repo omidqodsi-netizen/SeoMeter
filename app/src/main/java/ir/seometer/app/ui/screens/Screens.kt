@@ -1,78 +1,36 @@
 package ir.seometer.app.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Analytics
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.ErrorOutline
-import androidx.compose.material.icons.rounded.Image
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.rounded.Link
-import androidx.compose.material.icons.rounded.PictureAsPdf
-import androidx.compose.material.icons.rounded.Public
-import androidx.compose.material.icons.rounded.Smartphone
-import androidx.compose.material.icons.rounded.Speed
-import androidx.compose.material.icons.rounded.Title
-import androidx.compose.material.icons.rounded.WarningAmber
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ir.seometer.app.model.HistoryItem
+import ir.seometer.app.model.SeoIssue
 import ir.seometer.app.model.SeoReport
 import ir.seometer.app.model.Severity
-import ir.seometer.app.ui.components.GradientHeader
-import ir.seometer.app.ui.components.MetricCard
-import ir.seometer.app.ui.components.ScorePill
-import ir.seometer.app.ui.theme.Bg
-import ir.seometer.app.ui.theme.Blue
-import ir.seometer.app.ui.theme.Green
-import ir.seometer.app.ui.theme.Muted
-import ir.seometer.app.ui.theme.Navy
-import ir.seometer.app.ui.theme.Teal
+import ir.seometer.app.ui.components.*
+import ir.seometer.app.ui.theme.*
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -81,7 +39,7 @@ import java.util.Locale
 @Composable
 fun SplashScreen(onDone: () -> Unit) {
     LaunchedEffect(Unit) {
-        delay(1400)
+        delay(1500)
         onDone()
     }
 
@@ -90,51 +48,76 @@ fun SplashScreen(onDone: () -> Unit) {
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    listOf(Navy, Color(0xFF083D8C), Color(0xFF0B74E5))
+                    listOf(
+                        Color(0xFF06172F),
+                        Color(0xFF072E61),
+                        Color(0xFF0C5FA8)
+                    )
                 )
-            ),
-        contentAlignment = Alignment.Center
+            )
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(
-                modifier = Modifier
-                    .size(126.dp)
-                    .clip(RoundedCornerShape(32.dp))
-                    .background(Brush.linearGradient(listOf(Blue, Teal, Green))),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Speed,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(72.dp)
-                )
-            }
+        Box(
+            modifier = Modifier
+                .size(270.dp)
+                .offset(x = 170.dp, y = (-70).dp)
+                .clip(CircleShape)
+                .background(Blue.copy(alpha = 0.20f))
+        )
+        Box(
+            modifier = Modifier
+                .size(220.dp)
+                .align(Alignment.BottomStart)
+                .offset(x = (-100).dp, y = 70.dp)
+                .clip(CircleShape)
+                .background(Teal.copy(alpha = 0.20f))
+        )
 
-            Spacer(Modifier.height(22.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            BrandLogo(Modifier.size(126.dp))
+            Spacer(Modifier.height(26.dp))
             Text(
                 text = "سئومتر",
-                fontSize = 38.sp,
-                fontWeight = FontWeight.Black,
-                color = Color.White
+                color = Color.White,
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Black
             )
+            Spacer(Modifier.height(6.dp))
             Text(
                 text = "تحلیل هوشمند سئو سایت",
-                color = Color.White.copy(alpha = 0.78f)
+                color = Color.White.copy(alpha = 0.90f),
+                style = MaterialTheme.typography.titleMedium
             )
-            Spacer(Modifier.height(50.dp))
+            Spacer(Modifier.height(5.dp))
+            Text(
+                text = "سایت بهتر، فرصت‌های بیشتر",
+                color = Color.White.copy(alpha = 0.60f),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(Modifier.height(48.dp))
             LinearProgressIndicator(
-                modifier = Modifier.width(110.dp),
+                modifier = Modifier
+                    .width(108.dp)
+                    .height(4.dp)
+                    .clip(CircleShape),
                 color = Teal,
                 trackColor = Color.White.copy(alpha = 0.12f)
             )
-            Spacer(Modifier.height(38.dp))
-            Text(
-                text = "طراح: امید قدسی زاده",
-                color = Color.White.copy(alpha = 0.55f),
-                fontSize = 12.sp
-            )
         }
+
+        Text(
+            text = "طراح: امید قدسی زاده",
+            color = Color.White.copy(alpha = 0.46f),
+            fontSize = 11.sp,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 30.dp)
+        )
     }
 }
 
@@ -147,122 +130,138 @@ fun HomeScreen(
 ) {
     var url by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Bg)
-            .verticalScroll(rememberScrollState())
-    ) {
-        GradientHeader("سلام 👋", "سایتت را تحلیل کن، دقیق‌تر رشد کن")
+    Scaffold(
+        containerColor = Bg,
+        bottomBar = {
+            SeoBottomBar(
+                selected = 0,
+                onHome = {},
+                onHistory = onHistory,
+                onAbout = onAbout
+            )
+        }
+    ) { inner ->
+        Column(
+            modifier = Modifier
+                .padding(inner)
+                .fillMaxSize()
+                .background(Bg)
+                .verticalScroll(rememberScrollState())
+        ) {
+            PremiumHeader(
+                title = "سلام 👋",
+                subtitle = "سایتت را تحلیل کن، دقیق‌تر رشد کن",
+                showLogo = true
+            )
 
-        Column(Modifier.padding(16.dp)) {
-            Card(
-                shape = RoundedCornerShape(26.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(Modifier.padding(18.dp)) {
-                    Text("آدرس سایت خود را وارد کنید", fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(10.dp))
-                    OutlinedTextField(
-                        value = url,
-                        onValueChange = { url = it },
-                        leadingIcon = {
-                            Icon(Icons.Rounded.Language, contentDescription = null)
-                        },
-                        placeholder = { Text("example.com") },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
-                        shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier.fillMaxWidth()
+            Column(Modifier.padding(horizontal = 16.dp, vertical = 18.dp)) {
+                PremiumCard {
+                    Text(
+                        text = "آدرس سایت خود را وارد کنید",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
                     )
                     Spacer(Modifier.height(12.dp))
-                    Button(
-                        onClick = { onAnalyze(url) },
+
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        OutlinedTextField(
+                            value = url,
+                            onValueChange = { url = it },
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = { Text("example.com") },
+                            leadingIcon = { Icon(Icons.Rounded.Language, null, tint = Blue) },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+                            shape = RoundedCornerShape(17.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Blue,
+                                unfocusedBorderColor = Border,
+                                focusedContainerColor = SurfaceSoft,
+                                unfocusedContainerColor = SurfaceSoft
+                            )
+                        )
+                    }
+
+                    Spacer(Modifier.height(12.dp))
+                    PrimaryActionButton(
+                        text = "شروع تحلیل",
                         enabled = url.isNotBlank(),
-                        shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(52.dp)
-                    ) {
-                        Icon(Icons.Rounded.Analytics, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text("شروع تحلیل", fontWeight = FontWeight.Bold)
-                    }
+                        icon = Icons.Rounded.Analytics,
+                        onClick = { onAnalyze(url) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
-            }
 
-            Spacer(Modifier.height(18.dp))
-            Text("چه چیزهایی بررسی می‌شود؟", fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(10.dp))
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(9.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Box(Modifier.weight(1f)) {
-                    MetricCard(Icons.Rounded.Title, "عنوان و متا", "SEO", Blue)
-                }
-                Box(Modifier.weight(1f)) {
-                    MetricCard(Icons.Rounded.Link, "لینک‌ها", "URL", Teal)
-                }
-                Box(Modifier.weight(1f)) {
-                    MetricCard(Icons.Rounded.Image, "تصاویر", "ALT", Green)
-                }
-            }
+                Spacer(Modifier.height(22.dp))
+                SectionTitle("چه چیزهایی بررسی می‌شود؟")
+                Spacer(Modifier.height(12.dp))
 
-            Spacer(Modifier.height(22.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("سایت‌های اخیر", fontWeight = FontWeight.Bold)
-                TextButton(onClick = onHistory) {
-                    Text("مشاهده همه")
-                }
-            }
-
-            history.take(4).forEach { historyItem ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 5.dp),
-                    shape = RoundedCornerShape(18.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.padding(14.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(Icons.Rounded.Public, contentDescription = null, tint = Blue)
-                        Spacer(Modifier.width(10.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(
-                                historyItem.url
-                                    .replace("https://", "")
-                                    .replace("http://", ""),
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            Text(
-                                formatDate(historyItem.createdAt),
-                                color = Muted,
-                                fontSize = 11.sp
-                            )
-                        }
-                        ScorePill(historyItem.score)
+                    FeatureTile(
+                        icon = Icons.Rounded.Title,
+                        value = "SEO",
+                        label = "عنوان و متا",
+                        tint = Blue,
+                        modifier = Modifier.weight(1f)
+                    )
+                    FeatureTile(
+                        icon = Icons.Rounded.Link,
+                        value = "URL",
+                        label = "لینک‌ها",
+                        tint = Teal,
+                        modifier = Modifier.weight(1f)
+                    )
+                    FeatureTile(
+                        icon = Icons.Rounded.Image,
+                        value = "ALT",
+                        label = "تصاویر",
+                        tint = Green,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Spacer(Modifier.height(24.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    SectionTitle("سایت‌های اخیر")
+                    TextButton(onClick = onHistory) {
+                        Text("مشاهده همه", color = Blue, fontWeight = FontWeight.Bold)
                     }
                 }
-            }
 
-            Spacer(Modifier.height(8.dp))
-            OutlinedButton(
-                onClick = onAbout,
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(Icons.Rounded.Info, contentDescription = null)
-                Spacer(Modifier.width(6.dp))
-                Text("درباره برنامه و حریم خصوصی")
+                if (history.isEmpty()) {
+                    PremiumCard(modifier = Modifier.fillMaxWidth()) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                Modifier
+                                    .size(42.dp)
+                                    .clip(RoundedCornerShape(14.dp))
+                                    .background(Blue.copy(alpha = 0.10f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(Icons.Rounded.History, null, tint = Blue)
+                            }
+                            Spacer(Modifier.width(12.dp))
+                            Column {
+                                Text("هنوز گزارشی ندارید", fontWeight = FontWeight.Bold)
+                                Text("اولین سایت را تحلیل کنید تا اینجا ذخیره شود.", color = Muted, fontSize = 12.sp)
+                            }
+                        }
+                    }
+                } else {
+                    history.take(4).forEach { item ->
+                        RecentSiteCard(item)
+                        Spacer(Modifier.height(9.dp))
+                    }
+                }
+
+                Spacer(Modifier.height(14.dp))
             }
         }
     }
@@ -278,7 +277,7 @@ fun ScanScreen(
 ) {
     LaunchedEffect(progress) {
         if (progress >= 100) {
-            delay(500)
+            delay(550)
             onDone()
         }
     }
@@ -288,62 +287,97 @@ fun ScanScreen(
             .fillMaxSize()
             .background(Bg)
     ) {
-        GradientHeader(
-            "در حال تحلیل سایت...",
-            "این فرایند روی دستگاه شما انجام می‌شود"
+        PremiumHeader(
+            title = "در حال تحلیل سایت...",
+            subtitle = "در حال بررسی بخش‌های مختلف سئو",
+            compact = true
         )
 
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            if (error != null) {
-                Card(
-                    modifier = Modifier.padding(22.dp),
-                    shape = RoundedCornerShape(24.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+        if (error != null) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                PremiumCard(Modifier.padding(20.dp)) {
+                    Box(
+                        Modifier
+                            .size(58.dp)
+                            .align(Alignment.CenterHorizontally)
+                            .clip(CircleShape)
+                            .background(Danger.copy(alpha = 0.10f)),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            Icons.Rounded.ErrorOutline,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.size(50.dp)
-                        )
-                        Spacer(Modifier.height(12.dp))
-                        Text(error, fontWeight = FontWeight.Bold)
-                        Spacer(Modifier.height(14.dp))
-                        Button(onClick = onRetry) {
-                            Text("بازگشت و تلاش دوباره")
-                        }
+                        Icon(Icons.Rounded.ErrorOutline, null, tint = Danger, modifier = Modifier.size(30.dp))
                     }
+                    Spacer(Modifier.height(14.dp))
+                    Text(error, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                    Spacer(Modifier.height(14.dp))
+                    PrimaryActionButton("بازگشت و تلاش دوباره", onClick = onRetry, modifier = Modifier.fillMaxWidth())
                 }
-            } else {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(
-                            progress = { progress / 100f },
-                            modifier = Modifier.size(160.dp),
-                            strokeWidth = 13.dp,
-                            color = Teal,
-                            trackColor = Color(0xFFE5EEF8)
-                        )
+            }
+            return
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp, vertical = 28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            PremiumCard(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(vertical = 28.dp, horizontal = 18.dp)
+            ) {
+                Box(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        progress = { progress.coerceIn(0, 100) / 100f },
+                        modifier = Modifier.size(154.dp),
+                        color = Teal,
+                        trackColor = Color(0xFFE6EEF8),
+                        strokeWidth = 12.dp
+                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            "$progress٪",
-                            fontSize = 34.sp,
+                            text = "${progress.coerceIn(0, 100)}٪".toFaDigits(),
+                            fontSize = 37.sp,
                             fontWeight = FontWeight.Black,
                             color = Navy
                         )
+                        Text("پیشرفت", color = Muted, fontSize = 11.sp)
                     }
-                    Spacer(Modifier.height(24.dp))
-                    Text(text, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(6.dp))
-                    Text("صفحه را نبندید", color = Muted)
                 }
+                Spacer(Modifier.height(18.dp))
+                Text(
+                    text = text.ifBlank { "آماده‌سازی تحلیل" },
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = "این فرایند ممکن است چند ثانیه زمان ببرد",
+                    color = Muted,
+                    fontSize = 12.sp,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
+
+            Spacer(Modifier.height(18.dp))
+            PremiumCard(Modifier.fillMaxWidth()) {
+                ScanStep("عنوان‌ها و متادیتا", progress >= 20, progress in 6..19)
+                StepDivider()
+                ScanStep("تصاویر و تجربه موبایل", progress >= 40, progress in 20..39)
+                StepDivider()
+                ScanStep("لینک‌ها، robots و sitemap", progress >= 75, progress in 40..74)
+                StepDivider()
+                ScanStep("خزش صفحات و امتیاز نهایی", progress >= 96, progress in 75..95)
+            }
+
+            Spacer(Modifier.height(16.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Rounded.Lightbulb, null, tint = Blue, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(6.dp))
+                Text("برای نتیجه کامل، صفحه را نبندید.", color = Muted, fontSize = 12.sp)
             }
         }
     }
@@ -362,161 +396,85 @@ fun ResultsScreen(
             .background(Bg)
             .verticalScroll(rememberScrollState())
     ) {
-        GradientHeader("نتایج تحلیل", r.url)
+        PremiumHeader(
+            title = "نتایج تحلیل",
+            subtitle = cleanHost(r.url),
+            compact = true
+        )
 
         Column(Modifier.padding(16.dp)) {
-            Card(
-                shape = RoundedCornerShape(26.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+            PremiumCard(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(20.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(18.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text("امتیاز کلی سئو", fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(10.dp))
-                    Box(contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(
-                            progress = { r.score / 100f },
-                            modifier = Modifier.size(140.dp),
-                            strokeWidth = 12.dp,
-                            color = when {
-                                r.score >= 80 -> Green
-                                r.score >= 60 -> Color(0xFFF59E0B)
-                                else -> Color(0xFFEF4444)
-                            },
-                            trackColor = Color(0xFFE8EEF7)
-                        )
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    ScoreRing(r.score, Modifier.size(128.dp))
+                    Spacer(Modifier.width(18.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("امتیاز کلی سئو", style = MaterialTheme.typography.titleLarge)
+                        Spacer(Modifier.height(7.dp))
+                        Surface(
+                            shape = RoundedCornerShape(50.dp),
+                            color = scoreColor(r.score).copy(alpha = 0.10f)
+                        ) {
                             Text(
-                                r.score.toString(),
-                                fontSize = 42.sp,
-                                fontWeight = FontWeight.Black
+                                text = scoreLabel(r.score),
+                                color = scoreColor(r.score),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                             )
-                            Text("از 100", color = Muted)
                         }
+                        Spacer(Modifier.height(9.dp))
+                        Text(
+                            text = "با رفع موارد مهم، ساختار فنی سایت را بهتر کنید.",
+                            color = Muted,
+                            fontSize = 12.sp,
+                            lineHeight = 20.sp
+                        )
                     }
-                    Spacer(Modifier.height(14.dp))
-                    Text(
-                        when {
-                            r.score >= 80 -> "وضعیت عالی"
-                            r.score >= 60 -> "وضعیت خوب؛ قابل بهبود"
-                            else -> "نیازمند بهبود جدی"
-                        },
-                        fontWeight = FontWeight.Bold
-                    )
                 }
             }
 
             Spacer(Modifier.height(14.dp))
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(9.dp)
             ) {
-                SummaryBox(
-                    "بحرانی",
-                    r.critical,
-                    Color(0xFFEF4444),
-                    Modifier.weight(1f)
-                )
-                SummaryBox(
-                    "هشدار",
-                    r.warnings,
-                    Color(0xFFF59E0B),
-                    Modifier.weight(1f)
-                )
-                SummaryBox("تأیید", r.passed, Green, Modifier.weight(1f))
+                SummaryTile("بحرانی", r.critical, Danger, Modifier.weight(1f))
+                SummaryTile("هشدار", r.warnings, Warning, Modifier.weight(1f))
+                SummaryTile("تأیید", r.passed, Green, Modifier.weight(1f))
             }
 
-            Spacer(Modifier.height(18.dp))
-            Text("شاخص‌های اصلی", fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(24.dp))
+            SectionTitle("شاخص‌های اصلی")
+            Spacer(Modifier.height(12.dp))
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Box(Modifier.weight(1f)) {
-                    MetricCard(
-                        Icons.Rounded.Speed,
-                        "پاسخ",
-                        "${r.metrics.responseMs}ms",
-                        Blue
-                    )
-                }
-                Box(Modifier.weight(1f)) {
-                    MetricCard(
-                        Icons.Rounded.Smartphone,
-                        "موبایل",
-                        r.metrics.mobileScore.toString(),
-                        Teal
-                    )
-                }
-                Box(Modifier.weight(1f)) {
-                    MetricCard(
-                        Icons.Rounded.Link,
-                        "لینک",
-                        r.metrics.linkScore.toString(),
-                        Green
-                    )
-                }
+                FeatureTile(Icons.Rounded.Speed, "${r.metrics.responseMs}ms".toFaDigits(), "پاسخ", Blue, Modifier.weight(1f))
+                FeatureTile(Icons.Rounded.Smartphone, r.metrics.mobileScore.toString().toFaDigits(), "موبایل", Teal, Modifier.weight(1f))
+                FeatureTile(Icons.Rounded.Link, r.metrics.linkScore.toString().toFaDigits(), "لینک", Green, Modifier.weight(1f))
             }
 
-            Spacer(Modifier.height(18.dp))
-            Button(
+            Spacer(Modifier.height(22.dp))
+            PrimaryActionButton(
+                text = "مشاهده مشکلات و راه‌حل‌ها",
+                icon = Icons.Rounded.FactCheck,
                 onClick = onIssues,
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp)
-            ) {
-                Text("مشاهده مشکلات و راه‌حل‌ها")
-            }
-
-            Spacer(Modifier.height(8.dp))
-            OutlinedButton(
-                onClick = onShare,
-                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(Icons.Rounded.PictureAsPdf, contentDescription = null)
-                Spacer(Modifier.width(7.dp))
-                Text("ساخت و اشتراک گزارش PDF")
-            }
-
-            TextButton(
-                onClick = onBack,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text("بازگشت")
-            }
-        }
-    }
-}
-
-@Composable
-private fun SummaryBox(
-    label: String,
-    n: Int,
-    color: Color,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(18.dp),
-        color = color.copy(alpha = 0.1f)
-    ) {
-        Column(
-            modifier = Modifier.padding(14.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                n.toString(),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Black,
-                color = color
             )
-            Text(label, color = color, fontSize = 12.sp)
+            Spacer(Modifier.height(9.dp))
+            OutlineActionButton(
+                text = "ساخت و اشتراک گزارش PDF",
+                icon = Icons.Rounded.PictureAsPdf,
+                onClick = onShare,
+                modifier = Modifier.fillMaxWidth()
+            )
+            TextButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Text("بازگشت", color = Muted)
+            }
         }
     }
 }
@@ -524,102 +482,37 @@ private fun SummaryBox(
 @Composable
 fun IssuesScreen(r: SeoReport, onBack: () -> Unit) {
     var filter by remember { mutableStateOf<Severity?>(null) }
-    val filteredIssues = r.issues.filter { issue ->
-        filter == null || issue.severity == filter
+    val list = remember(r.issues, filter) {
+        r.issues.filter { filter == null || it.severity == filter }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Bg)
-    ) {
-        GradientHeader(
-            "مشکلات و پیشنهادها",
-            "${r.critical} بحرانی • ${r.warnings} هشدار"
+    Column(Modifier.fillMaxSize().background(Bg)) {
+        PremiumHeader(
+            title = "مشکلات و پیشنهادها",
+            subtitle = "${r.critical.toString().toFaDigits()} بحرانی • ${r.warnings.toString().toFaDigits()} هشدار",
+            compact = true
         )
 
         Row(
-            modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            FilterChip(
-                selected = filter == null,
-                onClick = { filter = null },
-                label = { Text("همه") }
-            )
-            FilterChip(
-                selected = filter == Severity.CRITICAL,
-                onClick = { filter = Severity.CRITICAL },
-                label = { Text("بحرانی") }
-            )
-            FilterChip(
-                selected = filter == Severity.WARNING,
-                onClick = { filter = Severity.WARNING },
-                label = { Text("هشدار") }
-            )
+            PremiumFilter("همه", filter == null) { filter = null }
+            PremiumFilter("بحرانی", filter == Severity.CRITICAL) { filter = Severity.CRITICAL }
+            PremiumFilter("هشدار", filter == Severity.WARNING) { filter = Severity.WARNING }
         }
 
         LazyColumn(
-            contentPadding = PaddingValues(12.dp),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(filteredIssues) { issue ->
-                val issueColor = when (issue.severity) {
-                    Severity.CRITICAL -> Color(0xFFEF4444)
-                    Severity.WARNING -> Color(0xFFF59E0B)
-                    Severity.PASSED -> Green
-                }
-
-                Card(
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ) {
-                    Column(Modifier.padding(15.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = if (issue.severity == Severity.PASSED) {
-                                    Icons.Rounded.CheckCircle
-                                } else {
-                                    Icons.Rounded.WarningAmber
-                                },
-                                contentDescription = null,
-                                tint = issueColor
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(
-                                issue.title,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-
-                        Spacer(Modifier.height(7.dp))
-                        Text(issue.detail, color = Muted, fontSize = 13.sp)
-
-                        if (issue.severity != Severity.PASSED) {
-                            Spacer(Modifier.height(8.dp))
-                            Surface(
-                                color = Blue.copy(alpha = 0.07f),
-                                shape = RoundedCornerShape(12.dp)
-                            ) {
-                                Text(
-                                    "راه‌حل: ${issue.fix}",
-                                    color = Navy,
-                                    modifier = Modifier.padding(10.dp),
-                                    fontSize = 12.sp
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
+            items(list) { issue -> IssueCard(issue) }
             item {
-                TextButton(
-                    onClick = onBack,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("بازگشت")
+                TextButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+                    Text("بازگشت", color = Muted)
                 }
             }
         }
@@ -627,120 +520,301 @@ fun IssuesScreen(r: SeoReport, onBack: () -> Unit) {
 }
 
 @Composable
-fun HistoryScreen(history: List<HistoryItem>, onBack: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Bg)
-    ) {
-        GradientHeader(
-            "گزارش‌ها و تاریخچه",
-            "نتیجه تحلیل‌های قبلی روی همین دستگاه"
-        )
+fun HistoryScreen(
+    history: List<HistoryItem>,
+    onHome: () -> Unit,
+    onAbout: () -> Unit
+) {
+    Scaffold(
+        containerColor = Bg,
+        bottomBar = {
+            SeoBottomBar(
+                selected = 1,
+                onHome = onHome,
+                onHistory = {},
+                onAbout = onAbout
+            )
+        }
+    ) { inner ->
+        Column(Modifier.padding(inner).fillMaxSize().background(Bg)) {
+            PremiumHeader(
+                title = "گزارش‌ها و تاریخچه",
+                subtitle = "تحلیل‌های ذخیره‌شده روی همین دستگاه",
+                compact = true
+            )
+            if (history.isEmpty()) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box(
+                            Modifier.size(72.dp).clip(CircleShape).background(Blue.copy(alpha = 0.09f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Rounded.Assessment, null, tint = Blue, modifier = Modifier.size(34.dp))
+                        }
+                        Spacer(Modifier.height(12.dp))
+                        Text("هنوز گزارشی ذخیره نشده", fontWeight = FontWeight.Bold)
+                        Text("بعد از اولین تحلیل، گزارش اینجا نمایش داده می‌شود.", color = Muted, fontSize = 12.sp)
+                    }
+                }
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    items(history) { RecentSiteCard(it) }
+                }
+            }
+        }
+    }
+}
 
-        LazyColumn(
-            contentPadding = PaddingValues(14.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+@Composable
+fun AboutScreen(
+    onHome: () -> Unit,
+    onHistory: () -> Unit
+) {
+    Scaffold(
+        containerColor = Bg,
+        bottomBar = {
+            SeoBottomBar(
+                selected = 2,
+                onHome = onHome,
+                onHistory = onHistory,
+                onAbout = {}
+            )
+        }
+    ) { inner ->
+        Column(
+            modifier = Modifier
+                .padding(inner)
+                .fillMaxSize()
+                .background(Bg)
+                .verticalScroll(rememberScrollState())
         ) {
-            items(history) { historyItem ->
-                Card(
-                    shape = RoundedCornerShape(18.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(14.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(Icons.Rounded.Public, contentDescription = null, tint = Blue)
-                        Spacer(Modifier.width(10.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(historyItem.url, fontWeight = FontWeight.Bold)
-                            Text(
-                                formatDate(historyItem.createdAt),
-                                color = Muted,
-                                fontSize = 11.sp
-                            )
-                        }
-                        ScorePill(historyItem.score)
-                    }
-                }
-            }
-
-            item {
-                TextButton(
-                    onClick = onBack,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("بازگشت")
-                }
+            PremiumHeader(
+                title = "درباره سئومتر",
+                subtitle = "یک ابزار ساده برای بررسی سئوی فنی",
+                showLogo = true,
+                compact = true
+            )
+            Column(Modifier.padding(16.dp)) {
+                InfoBlock(
+                    icon = Icons.Rounded.PrivacyTip,
+                    title = "حریم خصوصی",
+                    body = "سئومتر حساب کاربری، تبلیغات و ردیاب ندارد. آدرس سایت فقط برای دریافت اطلاعات عمومی همان سایت استفاده می‌شود."
+                )
+                InfoBlock(
+                    icon = Icons.Rounded.Security,
+                    title = "دسترسی‌ها",
+                    body = "برنامه فقط برای تحلیل سایت به اینترنت و وضعیت شبکه نیاز دارد و دسترسی حساس دیگری درخواست نمی‌کند."
+                )
+                InfoBlock(
+                    icon = Icons.Rounded.Info,
+                    title = "دقت گزارش",
+                    body = "امتیاز سئو یک شاخص داخلی برای اولویت‌بندی مشکلات Technical و On-page است و تضمین رتبه گوگل نیست."
+                )
+                InfoBlock(
+                    icon = Icons.Rounded.Person,
+                    title = "طراح",
+                    body = "امید قدسی زاده • نسخه ۱.۱.۰"
+                )
             }
         }
     }
 }
 
 @Composable
-fun AboutScreen(onBack: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Bg)
-            .verticalScroll(rememberScrollState())
+private fun SectionTitle(text: String) {
+    Text(text = text, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Black)
+}
+
+@Composable
+private fun RecentSiteCard(item: HistoryItem) {
+    PremiumCard(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 14.dp)
     ) {
-        GradientHeader("درباره سئومتر", "تحلیل فنی سئو بدون API پولی")
-
-        Column(Modifier.padding(18.dp)) {
-            Text("سئومتر", fontSize = 28.sp, fontWeight = FontWeight.Black)
-            Text("نسخه 1.0.2", color = Muted)
-            Spacer(Modifier.height(18.dp))
-
-            InfoBlock(
-                "حریم خصوصی",
-                "سئومتر حساب کاربری، تبلیغات، ردیاب و سرویس تحلیل ثالث ندارد. " +
-                    "آدرس سایتی که وارد می‌کنید فقط برای دریافت عمومی HTML همان سایت " +
-                    "استفاده می‌شود و گزارش روی دستگاه شما ساخته و ذخیره می‌شود."
-            )
-            InfoBlock(
-                "دسترسی‌ها",
-                "برنامه فقط به اینترنت و وضعیت شبکه نیاز دارد. دسترسی مکان، مخاطبین، " +
-                    "پیامک، دوربین یا حافظه عمومی درخواست نمی‌شود."
-            )
-            InfoBlock(
-                "دقت گزارش",
-                "امتیاز سئو یک شاخص داخلی برای اولویت‌بندی مشکلات Technical/On-page است " +
-                    "و تضمین‌کننده رتبه در موتور جستجو نیست."
-            )
-            InfoBlock("طراح", "امید قدسی زاده")
-
-            TextButton(
-                onClick = onBack,
-                modifier = Modifier.fillMaxWidth()
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                Modifier
+                    .size(42.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(Blue.copy(alpha = 0.10f)),
+                contentAlignment = Alignment.Center
             ) {
-                Text("بازگشت")
+                Icon(Icons.Rounded.Public, null, tint = Blue)
+            }
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                LtrText(
+                    text = cleanHost(item.url),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14
+                )
+                Spacer(Modifier.height(2.dp))
+                LtrText(formatDate(item.createdAt), color = Muted, fontSize = 11)
+            }
+            ScorePill(item.score)
+        }
+    }
+}
+
+@Composable
+private fun ScanStep(title: String, done: Boolean, active: Boolean) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            Modifier
+                .size(30.dp)
+                .clip(CircleShape)
+                .background(
+                    when {
+                        done -> Green.copy(alpha = 0.12f)
+                        active -> Blue.copy(alpha = 0.12f)
+                        else -> SurfaceSoft
+                    }
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            when {
+                done -> Icon(Icons.Rounded.Check, null, tint = Green, modifier = Modifier.size(18.dp))
+                active -> CircularProgressIndicator(modifier = Modifier.size(17.dp), strokeWidth = 2.dp, color = Blue)
+                else -> Box(Modifier.size(8.dp).clip(CircleShape).background(Border))
+            }
+        }
+        Spacer(Modifier.width(11.dp))
+        Text(title, fontWeight = if (active) FontWeight.Bold else FontWeight.Medium, color = if (done || active) Text else Muted)
+    }
+}
+
+@Composable
+private fun StepDivider() {
+    HorizontalDivider(color = Border, thickness = 1.dp)
+}
+
+@Composable
+private fun ScoreRing(score: Int, modifier: Modifier = Modifier) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(
+            progress = { score / 100f },
+            modifier = Modifier.fillMaxSize(),
+            color = scoreColor(score),
+            trackColor = Color(0xFFE8EEF7),
+            strokeWidth = 11.dp
+        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(score.toString().toFaDigits(), fontSize = 35.sp, fontWeight = FontWeight.Black, color = Navy)
+            Text("از ۱۰۰", color = Muted, fontSize = 11.sp)
+        }
+    }
+}
+
+@Composable
+private fun PremiumFilter(text: String, selected: Boolean, onClick: () -> Unit) {
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = { Text(text, fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium) },
+        shape = RoundedCornerShape(14.dp),
+        colors = FilterChipDefaults.filterChipColors(
+            selectedContainerColor = Lavender,
+            selectedLabelColor = Navy,
+            containerColor = Color.White,
+            labelColor = Muted
+        )
+    )
+}
+
+@Composable
+private fun IssueCard(issue: SeoIssue) {
+    val color = when (issue.severity) {
+        Severity.CRITICAL -> Danger
+        Severity.WARNING -> Warning
+        Severity.PASSED -> Green
+    }
+    val icon = when (issue.severity) {
+        Severity.PASSED -> Icons.Rounded.CheckCircle
+        Severity.WARNING -> Icons.Rounded.WarningAmber
+        Severity.CRITICAL -> Icons.Rounded.Error
+    }
+
+    PremiumCard(modifier = Modifier.fillMaxWidth()) {
+        Row(verticalAlignment = Alignment.Top) {
+            Box(
+                Modifier.size(40.dp).clip(RoundedCornerShape(14.dp)).background(color.copy(alpha = 0.10f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon, null, tint = color, modifier = Modifier.size(22.dp))
+            }
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(issue.title, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                Spacer(Modifier.height(4.dp))
+                Text(issue.detail, color = Muted, fontSize = 12.sp, lineHeight = 20.sp)
+            }
+        }
+
+        if (issue.severity != Severity.PASSED && issue.fix.isNotBlank()) {
+            Spacer(Modifier.height(12.dp))
+            Surface(
+                color = Blue.copy(alpha = 0.06f),
+                shape = RoundedCornerShape(15.dp)
+            ) {
+                Row(Modifier.padding(12.dp), verticalAlignment = Alignment.Top) {
+                    Icon(Icons.Rounded.AutoFixHigh, null, tint = Blue, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(7.dp))
+                    Text("راه‌حل: ${issue.fix}", color = Navy, fontSize = 12.sp, lineHeight = 20.sp)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun InfoBlock(title: String, body: String) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 10.dp),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
-    ) {
-        Column(Modifier.padding(15.dp)) {
-            Text(title, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(6.dp))
-            Text(body, color = Muted, lineHeight = 22.sp)
+private fun InfoBlock(icon: androidx.compose.ui.graphics.vector.ImageVector, title: String, body: String) {
+    PremiumCard(modifier = Modifier.fillMaxWidth()) {
+        Row(verticalAlignment = Alignment.Top) {
+            Box(
+                Modifier.size(42.dp).clip(RoundedCornerShape(14.dp)).background(Blue.copy(alpha = 0.09f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon, null, tint = Blue, modifier = Modifier.size(21.dp))
+            }
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(title, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                Spacer(Modifier.height(4.dp))
+                Text(body, color = Muted, lineHeight = 22.sp, fontSize = 13.sp)
+            }
         }
     }
+    Spacer(Modifier.height(10.dp))
+}
+
+private fun scoreColor(score: Int): Color = when {
+    score >= 80 -> Green
+    score >= 60 -> Warning
+    else -> Danger
+}
+
+private fun scoreLabel(score: Int): String = when {
+    score >= 85 -> "وضعیت عالی"
+    score >= 70 -> "وضعیت خوب"
+    score >= 55 -> "قابل بهبود"
+    else -> "نیازمند بهبود جدی"
+}
+
+private fun cleanHost(url: String): String {
+    return url
+        .removePrefix("https://")
+        .removePrefix("http://")
+        .trimEnd('/')
 }
 
 private fun formatDate(ms: Long): String {
-    return SimpleDateFormat(
-        "yyyy/MM/dd HH:mm",
-        Locale.getDefault()
-    ).format(Date(ms))
+    return SimpleDateFormat("yyyy/MM/dd  HH:mm", Locale.getDefault())
+        .format(Date(ms))
+        .toFaDigits()
 }
